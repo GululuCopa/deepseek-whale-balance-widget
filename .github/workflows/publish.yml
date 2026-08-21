@@ -29,6 +29,10 @@ jobs:
           node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
 
+      # 必须：npm >= 11.5.1 才支持 Trusted Publishing (OIDC) 自动交换；npm 10.x 会直接 ENEEDAUTH
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
+
       # 兼容 OIDC 发布：npm 账户配置了 trusted publishing 时可免 NPM_TOKEN
       # （清理 .npmrc 中残留的 _authToken，让 npm 走 OIDC 换取临时凭证）
       - name: Clean .npmrc for OIDC
