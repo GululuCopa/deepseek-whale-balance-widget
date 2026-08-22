@@ -192,3 +192,7 @@ curl http://127.0.0.1:3080/dsh-whale/last-turn.json
 ## 开发与维护
 
 完整规格、视觉参数、架构结论和生成提示词见 `whale-widget-prompt.md`。修改文字位置、颜色、动画、吸附逻辑、台词组或定价表时参考该文件。
+
+## 许可证
+
+本项目基于 **MIT License** 开源，详见 [LICENSE](LICENSE)。
