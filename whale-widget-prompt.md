@@ -57,8 +57,9 @@
 ### 今日已用（两种模式）
 
 **小鲸鱼记账（默认，usageMode='ledger'）**：
-- 每次拿到余额后，把 `totalBalance` 观测记入 `.dshw-usage.json`：`{ date, lastBalance, todayUsage, history }`。
+- 每次拿到余额后，把 `totalBalance` 观测记入 `.dshw-usage.json`：`{ date, lastBalance, lastCurrency, todayUsage, history }`。
 - 同一天内：若余额比上次观测**下降**，差值累加到 `todayUsage`；余额上升（充值）不扣减，只更新 `lastBalance`。
+- **币种感知**：观测币种与 `lastCurrency` 不同时，只重置基准（`lastBalance`/`lastCurrency`），不记差值——数值跳变来自币种切换而非真实消费（#13：`[0]` 选币时代 CNY/USD 随机切换曾把每次跳变记成一笔消费，单日虚记数千元）。
 - 跨天：`todayUsage` 归档进 `history`（保留最近 30 天），当日归零，`lastBalance` 取当前余额。
 - 该模式不需要 `DEEPSEEK_PLATFORM_TOKEN`，只依赖 `DEEPSEEK_API_KEY` 拉余额。
 
