@@ -66,9 +66,9 @@
 - 读 `DEEPSEEK_PLATFORM_TOKEN`（平台会话令牌，非 API key），请求 `https://platform.deepseek.com/api/v0/usage/by_api_key/amount?start=<本地零点>&end=<+86400>&tz=28800`，头 `Authorization: Bearer <token>`，15 秒超时。
 - 响应结构：`data.biz_data.series[]`，每项 `{model, buckets:[{time, usage:{RESPONSE_TOKEN, PROMPT_CACHE_HIT_TOKEN, PROMPT_CACHE_MISS_TOKEN}}]}`。**注意：接口不返回金额，只有 token 数**。
 - **峰谷定价换算**：按每个小时桶的整点（北京时间 UTC+8）判定空闲/高峰，套用 `PRICING` 表（每百万 token 单价）求和：
-  - 高峰时段：每日 9:00–12:00 与 14:00–18:00。
+  - 高峰时段：工作日 9:00–12:00 与 14:00–18:00；**2026-08-23 起（北京时间）周末（周六/周日）全天按谷价**。
   - 单价（空闲 / 高峰）：缓存命中输入 0.05 / 0.10 元；缓存未命中输入 1.5 / 3.0 元；输出 4.5 / 9.0 元。
-  - 定价表在 `lib/index.js` 顶部 `PEAK_HOURS` / `BASE_PRICE` / `PRICING` 常量，DeepSeek 调价时改这里。
+  - 定价表在 `lib/index.js` 顶部 `PEAK_HOURS` / `BASE_PRICE` / `PRO_PRICE` / `PRICING` 常量，周末谷价的生效分界在 `WEEKEND_VALLEY_FROM_SEC`，DeepSeek 调价时改这里。
 - 无令牌或令牌失效时自动回落记账模式（`usageMode` 仍标记为 'ledger'）。
 
 ### 每轮对话消耗（Host，会话事件监听）
@@ -174,7 +174,7 @@ div.dshwv-root（position:fixed，承载定位与翻转）
 | 数字动画 | 700ms ease-out 三次方（requestAnimationFrame） |
 | 自动刷新 | 60s；变化提示 900ms；气泡 5s 自动收起 |
 | 配置持久化 | `$DSH_HOME/.dshw-size.json`（回退 profile 下）；账本 `$DSH_HOME/.dshw-usage.json` |
-| 峰值判定 | 北京时间：高峰 9–12 与 14–18 点 |
+| 峰值判定 | 北京时间：工作日高峰 9–12 与 14–18 点；2026-08-23 起周末全天谷价 |
 | 音效 | press=Ya1/D1、release=Ya2/D2；按请求读盘，no-store |
 | z-index | 9999，`position: fixed`；菜单 10000 |
 
