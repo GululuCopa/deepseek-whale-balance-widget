@@ -12,7 +12,7 @@
 实现一个 DSH Web 界面右下角的余额挂件：
 
 - 小鲸鱼 cut-out 本体（`assets/DSniang1.png`）+ **代码绘制的白色对话气泡**（SVG 椭圆 + 尾巴），气泡内叠加三行文字。
-- 余额来自 DeepSeek 官方接口 `GET https://api.deepseek.com/user/balance`，取 `balance_infos[0].total_balance` 与 `currency`，请求头 `Authorization: Bearer <key>`，key 从 DSH 凭据服务读 `DEEPSEEK_API_KEY`。
+- 余额来自 DeepSeek 官方接口 `GET https://api.deepseek.com/user/balance`，从 `balance_infos` 中选取展示项（优先 CNY 且余额 > 0，其次任意非零项，再退回 CNY 项，最后取第一项；接口返回的多币种数组顺序不固定，不可直接取 `[0]`），请求头 `Authorization: Bearer <key>`，key 从 DSH 凭据服务读 `DEEPSEEK_API_KEY`。
 - **今日已用**双模式（菜单可选）：
   - 小鲸鱼记账（默认，免令牌）：观测余额差值自动记账，持久化到 `.dshw-usage.json`，跨天归零归档。
   - 实时·令牌：读 `DEEPSEEK_PLATFORM_TOKEN`，调平台用量接口按峰谷定价换算。
