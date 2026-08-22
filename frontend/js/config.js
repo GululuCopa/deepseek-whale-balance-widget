@@ -794,7 +794,7 @@
   confirmYesEl.addEventListener("click", function () {
     hideModal();
     invoke("open_external", {
-      url: "https://github.com/xiaolinnnnnnn/DeepSeek-Balance-Whale-Widget/tree/DeepSeek-Balance-Whale-Widget-Win-Desktop",
+      url: "https://github.com/xiaolinnnnnnn/DeepSeek-Balance-Whale-Widget/tree/DeepSeek-Balance-Whale-Widget-Desktop",
     }).catch(function (err) {
       console.error("打开外部链接失败", err);
     });
@@ -804,7 +804,7 @@
     tutorialEl.addEventListener("click", function (e) {
       e.preventDefault();
       invoke("open_external", {
-        url: "https://github.com/xiaolinnnnnnn/DeepSeek-Balance-Whale-Widget/blob/DeepSeek-Balance-Whale-Widget-Win-Desktop/README.md",
+        url: "https://github.com/xiaolinnnnnnn/DeepSeek-Balance-Whale-Widget/blob/DeepSeek-Balance-Whale-Widget-Desktop/README.md",
       }).catch(function (err) {
         console.error("打开外部链接失败", err);
       });
