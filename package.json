@@ -1,26 +1,16 @@
 {
-  "name": "dsh-whale-widget",
-  "version": "0.2.7",
-  "description": "DSH Web 界面右下角的 DeepSeek 余额小鲸鱼挂件（含今日已用、峰谷定价、随机台词、音效与每轮消耗统计）",
-  "keywords": [
-    "dsh",
-    "dsh-plugin",
-    "deepseek-harness",
-    "balance",
-    "widget"
-  ],
+  "name": "ds-desktop-whale",
+  "version": "1.0.0",
+  "description": "DS Desktop Whale · DeepSeek 余额查询与记账 · 独立 Windows 桌面版",
+  "private": true,
   "type": "module",
-  "main": "lib/index.js",
-  "files": [
-    "lib",
-    "assets",
-    "cordis.patch.yml",
-    "README.md"
-  ],
-  "dsh": {
-    "bundle": {
-      "patch": "./cordis.patch.yml"
-    }
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "icon": "tauri icon"
   },
-  "license": "MIT"
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.8.4"
+  }
 }
