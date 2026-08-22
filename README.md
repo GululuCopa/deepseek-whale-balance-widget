@@ -43,38 +43,54 @@ dsh-whale-widget/
 
 ## 安装
 
-### 方式 A：本地开发安装（当前项目）
+### 方式 A：本地安装（推荐，从当前仓库）
 
-在项目根目录（`DeepSeek-Balance-Whale-Widget-main`）执行：
+在**仓库根目录**（`DeepSeek-Balance-Whale-Widget`，即 `package.json` 所在目录）执行：
 
 ```powershell
-dsh plugin --profile web add link:.\dsh-whale-widget
+dsh plugin --profile web add link:.
 ```
 
 说明：
 
 - `dsh plugin` 会把参数转发给 pnpm，并在成功后自动把 `dsh-whale-widget` 加入 `dsh.profile.bundles`
-- 使用 `link:` 会在 profile 的 `node_modules` 里链接到当前源码目录，方便继续改代码
-- 安装完成后重启 `dsh web`，再 F5 刷新浏览器
-- **如果之后移动了源码目录**，必须重新到新的项目根目录执行一次：
+- **`link:.` 表示链接当前目录**（仓库根目录本身就是插件包）。如果你复制了仓库到别处，用绝对路径：
   ```powershell
-  dsh plugin --profile web add link:.\dsh-whale-widget
+  dsh plugin --profile web add link:D:\你的路径\DeepSeek-Balance-Whale-Widget
   ```
-  因为 `link:` 记录的是源目录的绝对路径；移动后旧链接会失效。若提示已存在/冲突，可先 `dsh plugin --profile web remove dsh-whale-widget` 再重新 add。
+- ⚠️ 不要用 `link:.\dsh-whale-widget`——仓库里**没有** `dsh-whale-widget/` 子目录，这样会安装成普通依赖而非插件，重启后挂件不出现
+- 安装完成后重启 `dsh web`，再 F5 刷新浏览器
+- **如果之后移动了源码目录**，必须重新执行一次 `dsh plugin --profile web add link:.<新路径>`。若提示已存在/冲突，先 `dsh plugin --profile web remove dsh-whale-widget` 再重新 add
 
 ### 方式 B：发布到 npm 后安装
 
-如果你把这个包发布到 npm：
-
-```powershell
-cd dsh-whale-widget
-npm publish
-```
-
-然后任意机器上安装：
-
 ```powershell
 dsh plugin --profile web add dsh-whale-widget
+```
+
+### 给 AI 的安装说明（用 dsh 辅助安装时，直接复制给 AI）
+
+如果你希望让另一个 DSH / AI 助手帮你安装，把下面这段发给它即可：
+
+```
+请帮我安装插件 dsh-whale-widget，来源是 GitHub 仓库 MeteorNOX/DeepSeek-Balance-Whale-Widget。
+
+步骤：
+1. 确保 pnpm 可用（没有就先：npm install -g pnpm）
+2. 在 Web profile 安装：
+   dsh plugin --profile web add dsh-whale-widget
+   如果要从本地仓库链接安装（例如本地克隆的仓库根目录），则用：
+   dsh plugin --profile web add link:.<仓库绝对路径>
+   （注意：仓库根目录就是插件包，不要写成 link:.\dsh-whale-widget 这种带子目录的路径）
+3. 如果报 pnpm 阻止构建脚本（allowBuilds 相关），在 C:\Users\<用户名>\.dsh\profiles\web\pnpm-workspace.yaml 的 allowBuilds 下加对应的包 key，然后重跑
+4. 重启 dsh web，然后 F5 刷新浏览器
+
+安装后验证：
+- dsh --profile web --dump-config 应该能看到 dsh-whale-widget 在 bundles 里
+- curl http://127.0.0.1:3080/dsh-whale/balance.json 应返回 200 JSON（含 totalBalance）
+- curl http://127.0.0.1:3080/dsh-whale/widget.js 应返回 200 JS
+
+另外请检查 DSH 凭据里是否配置了 DEEPSEEK_API_KEY（没有就提示用户配置；DEEPSEEK_PLATFORM_TOKEN 可选，不配也能用默认的记账模式）。
 ```
 
 ### 关于令牌（安装后必读）
