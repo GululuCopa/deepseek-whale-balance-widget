@@ -18,7 +18,9 @@
   - 实时·令牌：读 `DEEPSEEK_PLATFORM_TOKEN`，调平台用量接口按峰谷定价换算。
 - **每轮对话消耗统计**：宿主插件监听 `session/event`，捕获 `assistant/message` 的真实 usage（input/cache/output/reasoning tokens），按 `turn` 聚合；`turn/end` 时结算本轮金额（复用峰谷定价表）写入 `/dsh-whale/last-turn.json`（seq 递增）。前端每秒轮询，出现新 seq 且「每轮对话后自动显示消耗金额」开启时弹出消耗金额泡泡（居中两行：A 样式「上一轮对话消耗:」+ 红色 B 样式「¥X.XX」）；自动关闭时间可设秒数（0=不自动关闭）；消耗泡泡显示期间余额变动不弹普通泡泡。
 - 支持：拖拽、四分之一区域吸附（上下左右四边）、左吸附整体水平翻转（文字同步）、汉堡菜单（大小/音效/音量/用量模式/峰谷文案/气泡开关/每轮消耗开关与自动关闭时间）、按压 Q 弹 + 音效、余额数字滚动动画、60 秒自动刷新 + 点击手动刷新、随机台词气泡（点击切换/关闭）、**每次打开界面自动启用（常驻自启）**。
-- **白饭余额图标**（`assets/rice/{full,half,empty}.png`，Issue #34）：鲸鱼左侧底部常驻，三态显示余额充裕度——余额 ≥ 2×底线 → 满碗；底线 ≤ 余额 < 2×底线 → 半碗；余额 < 底线 → 空碗。底线由菜单「余额底线」手动设置（默认 ¥10，填 0 恒满碗）。平台预警阈值读取接口已就绪（`users/current` → `balance_alert[币种].alert_bound`，需 `DEEPSEEK_PLATFORM_TOKEN`，`/dsh-whale/alert.json`），由前端手动开关按需调用（开关待接入）。
+- **白饭余额图标**（`assets/rice/{full,half,empty}.png`，Issue #34）：鲸鱼左侧底部常驻，三态显示余额充裕度——余额 ≥ 2×底线 → 满碗；底线 ≤ 余额 < 2×底线 → 半碗；余额 < 底线 → 空碗。底线来源两种，菜单自由切换：
+  - **手动「余额底线」**（默认 ¥10，填 0 恒满碗）：默认方式，输入框可编辑，持久化到 size.json。
+  - **「使用平台预警阈值」开关**：开启后调 `/dsh-whale/alert.json`（`users/current` → `balance_alert[币种].alert_bound`，需 `DEEPSEEK_PLATFORM_TOKEN`）拉取平台阈值，填入输入框并锁定（disabled + title 说明）；关闭恢复手动编辑。开关状态持久化，重启页面自动恢复并重新拉取。
 
 ## 二、架构（务必先读）
 
