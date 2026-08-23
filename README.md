@@ -14,10 +14,13 @@ DeepSeek Harness（DSH）Web 界面右下角的常驻余额挂件：小鲸鱼气
 - 💬 **每轮对话消耗统计**：监听本机会话事件，每轮对话结束后弹出本轮消耗金额（精确 usage，非估算）
   - 菜单可开关「每轮对话后自动显示消耗金额」；「自动关闭时间」可自定义秒数（填 0 表示不自动关闭）
   - 消耗金额泡泡显示期间，余额变动不弹普通泡泡
+- 🍚 **白饭余额图标**（Issue #34）：鲸鱼左侧底部常驻白饭图标，三态直观反映余额充裕度
+  - 余额 ≥ **2×底线** → 满满一碗大白饭；**底线** ≤ 余额 < 2×底线 → 半碗；余额 < 底线 → 空碗
+  - 底线由菜单「**余额底线**」手动设置（默认 ¥10，填 0 恒满碗）。平台预警阈值读取接口已就绪（`/dsh-whale/alert.json`，需 `DEEPSEEK_PLATFORM_TOKEN`），由前端手动开关按需调用（开关待接入）
 - 🖱️ **拖拽 + 四边四分之一吸附**（左/右/上/下，角落可组合）
 - 🔄 左吸附时整体**水平镜像翻转**（文字同步反向、带动画）
 - 🧸 **按压 Q 弹**玩偶效果（按压时底部坐标不变）
-- 🎚️ **汉堡菜单**（悬停鲸鱼右上角出现）：大小滑块（0.6–2.5 倍）、音效切换（小黄鸭 / 音效1）、音量调节、用量模式、峰谷提示文案（默认 / 梁文峰谷 / !?强强?!）、气泡开关、每轮消耗开关与自动关闭时间
+- 🎚️ **汉堡菜单**（悬停鲸鱼右上角出现）：大小滑块（0.6–2.5 倍）、音效切换（小黄鸭 / 音效1）、音量调节、用量模式、峰谷提示文案（默认 / 梁文峰谷 / !?强强?!）、气泡开关、每轮消耗开关与自动关闭时间、余额底线
 - 🔊 **音效**：按压/松手音效（可选包内 mp3，缺失时静默降级）
 - 💬 **随机台词**：点击气泡切换随机台词段（加权随机，含峰谷提示/今日已用/gif 动图/卖萌吐槽），再点一次关闭；气泡总显示 5 秒自动收起
 - 📐 随浏览器窗口自动缩放；文字位置/字号与图片联动
@@ -37,7 +40,11 @@ dsh-whale-widget/
 │   ├── DSniang02.png     # 备用整图（兼容旧版手动安装路径）
 │   ├── rua.gif           # 随机台词 gif（可选）
 │   ├── Ya1.mp3 / Ya2.mp3 # 小黄鸭音效（可选）
-│   └── D1.mp3 / D2.mp3   # 音效1（可选）
+│   ├── D1.mp3 / D2.mp3   # 音效1（可选）
+│   └── rice/             # 白饭余额图标（Issue #34）
+│       ├── full.png      # 满满一碗大白饭
+│       ├── half.png      # 半碗大白饭
+│       └── empty.png     # 空碗
 └── whale-widget-prompt.md # 完整规格/维护提示词
 ```
 
@@ -186,12 +193,16 @@ curl http://127.0.0.1:3080/dsh-whale/image.png
 curl http://127.0.0.1:3080/dsh-whale/balance.json
 curl http://127.0.0.1:3080/dsh-whale/size.json
 curl http://127.0.0.1:3080/dsh-whale/last-turn.json
+curl http://127.0.0.1:3080/dsh-whale/rice.png?level=full
+curl http://127.0.0.1:3080/dsh-whale/alert.json
 ```
 
 - `/dsh-whale/image.png` → 200 `image/png`
 - `/dsh-whale/balance.json` → 200，含 `{"ok":true,"totalBalance":...,"currency":"CNY","todayUsage":...}`
 - `/dsh-whale/size.json` → GET 返回配置；PUT 写入
 - `/dsh-whale/last-turn.json` → 200，含最近一轮对话消耗 `{seq, turn, amount, tokens}`
+- `/dsh-whale/rice.png?level=full|half|empty` → 200 `image/png`
+- `/dsh-whale/alert.json` → 200 JSON（平台预警阈值；未配置令牌返回 `{ok:false, code:'NO_TOKEN'}`）
 - 浏览器 F5 后右下角出现挂件
 
 ## 常见问题
