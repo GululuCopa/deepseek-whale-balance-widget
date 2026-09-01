@@ -4,6 +4,8 @@
 
 DeepSeek Harness（DSH）Web 界面右下角的常驻余额挂件：小鲸鱼气泡图 + 多模型账户余额（DeepSeek / OpenCode Go / Z.AI / Grok）+ 5 小时、每周用量窗口 + 今日已用 + 每轮对话消耗统计，每次打开界面自动启用。本项目是标准 DSH 插件包，可通过 `dsh plugin` 安装/卸载。
 
+> ⚠️ **本项目为魔改（fork）版本**，基于开源项目 [MeteorNOX/DeepSeek-Balance-Whale-Widget](https://github.com/MeteorNOX/DeepSeek-Balance-Whale-Widget) 二次开发：在原项目基础之上增加了多模型账户（OpenCode Go / Z.AI / Grok）、白饭余额图标（Issue #34）、跟随模型展示等大量扩展功能。上游原始项目请访问 <https://github.com/MeteorNOX/DeepSeek-Balance-Whale-Widget>，MIT License 延续原项目。
+
 ## 特性
 
 - 🐋 **常驻自启**：随 DSH Web 界面每次打开自动出现（标准 DSH bundle 插件）
